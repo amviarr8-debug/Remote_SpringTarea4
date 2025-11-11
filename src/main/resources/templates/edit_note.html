@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Añadir Nueva Nota</title>
+    <title>Editar notas</title>
     <meta charset="UTF-8">
 </head>
 <body>
-<h1>Añadir Nueva Nota</h1>
+<h1>EDITA NOTAS</h1>
 <form action="#" th:action="@{/edit-note/{id}(id=${note.id})}" th:object="${note}" method="post">
-    <input type="hidden" name="_method" value="PUT"/>
+    <input type="hidden" name="_method" value="put"/>
     <label for="title">Título:</label>
     <input type="text" id="title" name="title" th:field="*{title}"/><br><br>
     <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}" style="color: red;">[Error de Título]</span><br>

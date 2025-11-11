@@ -13,6 +13,7 @@
                 <th>Título</th>
                 <th>Contenido</th>
                 <th>Fecha</th>
+                <th>Fecha Actualizada</th>
                 <th>Borrar</th>
                 <th>Editar</th>
 
@@ -24,22 +25,10 @@
                 <td th:text="${note.title}"></td>
                 <td th:text="${note.content}"></td>
                 <td th:text="${note.date}"></td>
-                <td ><button id="editBtn" th:data-id="${note.id}">Editar</button></td>
-                <td ><button id="deleteBtn" th:data-id="${note.id}">Borrar</button></td>
+                <td th:text="${note.getUpdatedAt()}"></td>
+                <td ><button th:onclick="|window.location.href='/edit-note/${note.id}'|">Editar</button></td>
+                <td ><button>Borrar</button></td>
             </tr>
-            <script>
-                let noteId;
-
-                document.getElementById('editBtn').addEventListener('click', () => {
-                    noteId = this.getAttribute('data-id');
-                    window.location.href = '/edit-note/' + noteId;
-                });
-
-                document.getElementById('deleteBtn').addEventListener('click', () => {
-                    noteId = this.getAttribute('data-id');
-                    window.location.href = '/delete-note/' + noteId;
-                });
-            </script>
         </tbody>
     </table>
     <p th:text="'Total de notas: ' + ${#lists.size(notes)}"></p>

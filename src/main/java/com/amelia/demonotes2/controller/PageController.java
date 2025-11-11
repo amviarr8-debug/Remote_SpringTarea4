@@ -1,5 +1,6 @@
 package com.amelia.demonotes2.controller;
 
+import java.util.Comparator;
 import java.util.List;
 
 import com.amelia.demonotes2.service.NoteService;
@@ -38,6 +39,7 @@ public class PageController {
     public String showAllNotes(Model model) {
         // DELEGAR: El Service se encarga de findAll()
         List<Note> notes = noteService.findAll();
+        notes.sort(Comparator.comparingInt(n -> n.getDate().getDayOfYear())); // ordena por dia por no refacorizar a LocalDateTime que seria más preciso
         model.addAttribute("notes", notes);
         return "list_notes";
     }

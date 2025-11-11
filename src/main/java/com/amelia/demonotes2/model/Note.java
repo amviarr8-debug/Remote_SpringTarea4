@@ -24,6 +24,7 @@ public class Note {
     private String content;
 
     private LocalDate createdAt;
+    private LocalDate updatedAt;
 
     @PrePersist
     public void prePersist() {
@@ -38,16 +39,17 @@ public class Note {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    // set id no vale porque el id es autoincremental y no se edita
 
     public String getTitle() {
         return title;
     }
 
     public void setTitle(String title) {
+
         this.title = title;
+        this.updatedAt = LocalDate.now();
+
     }
 
     public String getContent() {
@@ -55,10 +57,14 @@ public class Note {
     }
 
     public void setContent(String content) {
+
         this.content = content;
+        this.updatedAt = LocalDate.now();
     }
 
     public LocalDate getDate() {
-        return createdAt;
+        return createdAt  == null ? LocalDate.now() : createdAt;
     }
+    public LocalDate getUpdatedAt() {
+        return updatedAt;}
 }
