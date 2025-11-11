@@ -33,6 +33,7 @@ import jakarta.validation.Valid;
         // configurado
         @GetMapping
         public List<Note> getAllNotes(@RequestParam(required = false) String keyword) {
+
             return noteService.findByKeyword(keyword);
         }
 

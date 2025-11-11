@@ -26,7 +26,7 @@ public class PageController {
 
        @GetMapping("/menu")
     public String showMenu(Model model) {
-        // DELEGAR: El Service se encarga de findAll()
+
         return "menu";
     }
 

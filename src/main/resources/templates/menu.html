@@ -176,11 +176,11 @@
         <textarea id="content" rows="4" placeholder="min. 10 caracteres"></textarea>
     </div>
 
-    <button>Ejecutar</button>
-    <button style="background-color: #6c757d;">Limpiar salida</button>
+    <button id="btnExecute">Ejecutar</button>
+    <button id="btnClear" style="background-color: #6c757d;">Limpiar salida</button>
 
     <h3>Respuesta</h3>
-    <pre>[sin respuesta]</pre>
+    <pre id="response">[sin respuesta]</pre>
 </div>
 <script>
     document.getElementById('btnEdit').addEventListener('click', () => {
@@ -201,6 +201,81 @@
             return;
         }
         window.location.href = `/delete-note/${id}`;
+    });
+   /* Para el REST*/
+    document.addEventListener('DOMContentLoaded', () => {
+        const executeBtn = document.getElementById('btnExecute');
+        const clearBtn = document.getElementById('btnClear');
+        const responsePre = document.getElementById('response');
+
+
+        executeBtn.addEventListener('click', () => {
+        const method = document.getElementById('method').value;
+        const id = document.getElementById('restId').value.trim();
+        const keyword = document.getElementById('keyword').value.trim();
+        const title = document.getElementById('title').value.trim();
+        const content = document.getElementById('content').value.trim();
+
+            let url = '/api/notes';
+            let options = { method: method };
+
+            // Configurar GET con id o keyword
+            if (method === 'GET') {
+                if (id) {
+                    url += '/' + id;
+                } else if (keyword) {
+                    url += `?keyword=${encodeURIComponent(keyword)}`;
+                }
+            }
+
+            // Configurar POST o PUT
+            if (method === 'POST' || method === 'PUT') {
+                if (method === 'PUT') {
+                    if (!id) {
+                        alert('Para actualizar, ingresa un ID válido.');
+                        return;
+                    }
+                    url += '/' + id;
+                }
+                if (title.length < 3 || content.length < 10) {
+                    alert('El título debe tener mínimo 3 caracteres y el contenido mínimo 10.');
+                    return;
+                }
+                options.headers = { 'Content-Type': 'application/json' };
+                options.body = JSON.stringify({ title, content });
+            }
+
+            // Configurar DELETE
+            if (method === 'DELETE') {
+                if (!id) {
+                    alert('Para borrar, ingresa un ID válido.');
+                    return;
+                }
+                url += '/' + id;
+            }
+
+            // Ejecutar fetch
+            fetch(url, options)
+                .then(async res => {
+                    let data;
+                    try { data = await res.json(); }
+                    catch(e) { data = await res.text(); }
+                    responsePre.textContent = JSON.stringify(data, null, 2);
+                })
+                .catch(err => {
+                    responsePre.textContent = 'ERROR: ' + err;
+                });
+        });
+
+        clearBtn.addEventListener('click', () => {
+            responsePre.textContent = '[sin respuesta]';
+            document.getElementById('restId').value = '';
+            document.getElementById('keyword').value = '';
+            document.getElementById('title').value = '';
+            document.getElementById('content').value = '';
+            document.getElementById('method').selectedIndex = 0;
+
+        });
     });
 </script>
 </body>
