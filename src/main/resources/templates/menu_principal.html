@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Menú Principal</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+<h1>Menú Principal</h1>
+<ul>
+    <li><a th:href="@{/list-notes}">Listar Notas</a></li>
+    <li><a th:href="@{/new-note}">Añadir Nueva Nota</a></li>
+    <li><a th:href="@{/delete-note}">Borrar Nota </a></li>
+    <li><a th:href="@{/edit-note}">Modificar Nota </a></li>
+</ul>
+</body>
+</html>

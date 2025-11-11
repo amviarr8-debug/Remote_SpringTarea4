@@ -1,0 +1,90 @@
+package com.amelia.demonotes2.controller;
+
+import java.util.List;
+
+import com.amelia.demonotes2.service.NoteService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+
+import com.amelia.demonotes2.model.Note;
+
+
+
+import jakarta.validation.Valid;
+
+@Controller
+public class PageController {
+
+    // CAMBIO: Inyectar NoteService
+    @Autowired
+    private NoteService noteService;
+
+    // ... (showMenu, showNewNoteForm, showDeleteNotePage - sin cambios)
+    @GetMapping("/menu-principal")
+    public String showMenuPpla(Model model) {
+        // DELEGAR: El Service se encarga de findAll()
+        return "menu_principal";
+    }
+    @GetMapping("/menu")
+    public String showMenu(Model model) {
+        // DELEGAR: El Service se encarga de findAll()
+        return "menu";
+    }
+
+    @GetMapping("/list-notes")
+    public String showAllNotes(Model model) {
+        // DELEGAR: El Service se encarga de findAll()
+        List<Note> notes = noteService.findAll();
+        model.addAttribute("notes", notes);
+        return "list_notes";
+    }
+
+    @GetMapping("/new-note")
+    public String showNewNoteForm(Model model) {
+        // DELEGAR: El Service se encarga de crear un nuevo objeto Note
+        Note note = new Note();
+        model.addAttribute("note", note);
+        return "new_note";
+    }
+
+    @PostMapping("/new-note")
+    public String createNote(@Valid Note note, BindingResult br, Model model) {
+        if (br.hasErrors()) {
+            model.addAttribute("note", note);
+            return "new_note";
+        }
+        // DELEGAR: El Service se encarga de save()
+        noteService.save(note);
+        return "redirect:/list_notes";
+    }
+
+    @GetMapping("/edit-note/{id}")
+    public String showEditNoteForm(@PathVariable Long id, Model model) {
+        // DELEGAR: El Service se encarga de findById (y del 404)
+        Note note = noteService.findById(id);
+        model.addAttribute("note", note);
+        return "edit_note";
+    }
+
+    @PutMapping("/edit-note/{id}")
+    public String updateNoteMvc(@PathVariable Long id, @Valid Note note, BindingResult br, Model model) {
+        if (br.hasErrors()) {
+            model.addAttribute("note", note);
+            return "edit_note";
+        }
+
+        // DELEGAR: El Service se encarga de la lógica de actualización y de la
+        // simulación de conflicto
+        noteService.update(id, note);
+
+        return "redirect:/list-notes";
+    }
+    @GetMapping("/forced-error")
+    public String forceError() {
+        throw new RuntimeException("Error 500 de prueba forzado desde la vista.");
+
+    }
+}

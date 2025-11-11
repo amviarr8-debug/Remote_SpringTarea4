@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Lista de Notas</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <h1>Lista de Notas</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Título</th>
+                <th>Contenido</th>
+                <th>Fecha</th>
+                <th>Borrar</th>
+                <th>Editar</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="note : ${notes}">
+                <td th:text="${note.id}"></td>
+                <td th:text="${note.title}"></td>
+                <td th:text="${note.content}"></td>
+                <td th:text="${note.date}"></td>
+                <td ><button id="editBtn" th:data-id="${note.id}">Editar</button></td>
+                <td ><button id="deleteBtn" th:data-id="${note.id}">Borrar</button></td>
+            </tr>
+            <script>
+                let noteId;
+
+                document.getElementById('editBtn').addEventListener('click', () => {
+                    noteId = this.getAttribute('data-id');
+                    window.location.href = '/edit-note/' + noteId;
+                });
+
+                document.getElementById('deleteBtn').addEventListener('click', () => {
+                    noteId = this.getAttribute('data-id');
+                    window.location.href = '/delete-note/' + noteId;
+                });
+            </script>
+        </tbody>
+    </table>
+    <p th:text="'Total de notas: ' + ${#lists.size(notes)}"></p>
+    <p><a th:href="@{/menu}">Volver al menú</a></p>
+</body>
+</html>

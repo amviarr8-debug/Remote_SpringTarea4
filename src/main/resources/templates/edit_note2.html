@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Modificar Nota</title>
+    <script>
+        function loadNote() {
+            const noteId = document.getElementById("noteId").value;
+            if (!noteId) {
+                alert("Por favor, introduce un ID válido.");
+                return;
+            }
+
+            fetch('/api/notes/' + noteId)
+                .then(res => {
+                    if (!res.ok) throw new Error("No se encontró la nota con ID " + noteId);
+                    return res.json();
+                })
+                .then(note => {
+                    document.getElementById("noteTitle").value = note.title;
+                    document.getElementById("noteContent").value = note.content;
+                })
+                .catch(err => alert(err.message));
+        }
+
+        function updateNote() {
+            const noteId = document.getElementById("noteId").value;
+            const updatedNote = {
+                title: document.getElementById("noteTitle").value,
+                content: document.getElementById("noteContent").value
+            };
+
+            fetch('/api/notes/' + noteId, {
+                method: 'PUT', // o PUT si ajustas el controller REST
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updatedNote)
+            })
+                .then(res => {
+                    if (res.ok) alert("Nota actualizada correctamente");
+                    else alert("Error al actualizar la nota");
+                });
+        }
+    </script>
+</head>
+<body>
+<h1>Editar Nota (vía API)</h1>
+<label>ID:</label>
+<input type="number" id="noteId" />
+<button type="button" onclick="loadNote()">Cargar</button>
+
+<br><br>
+
+<label>Título:</label>
+<input type="text" id="noteTitle" /><br><br>
+<label>Contenido:</label>
+<textarea id="noteContent"></textarea><br><br>
+
+<button type="button" onclick="updateNote()">Guardar</button>
+<p><a th:href="@{/menu}">Volver al menú</a></p>
+</body>
+</html>

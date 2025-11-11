@@ -1,0 +1,12 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Error del Sistema</title>
+</head>
+<body>
+<h1>¡Algo ha ido muy mal! (<span th:text="${statusCode}"/>)</h1>
+<p th:text="${errorMessage}">Mensaje de error por defecto.</p>
+<p><a th:href="@{/menu}">Volver al menú</a></p>
+</body>
+</html>
