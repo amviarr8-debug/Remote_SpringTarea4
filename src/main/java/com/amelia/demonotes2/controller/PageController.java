@@ -15,6 +15,7 @@ import com.amelia.demonotes2.model.Note;
 
 
 import jakarta.validation.Valid;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class PageController {
@@ -23,26 +24,21 @@ public class PageController {
     @Autowired
     private NoteService noteService;
 
-    // ... (showMenu, showNewNoteForm, showDeleteNotePage - sin cambios)
-    @GetMapping("/menu-principal")
-    public String showMenuPpla(Model model) {
-        // DELEGAR: El Service se encarga de findAll()
-        return "menu_principal";
-    }
-    @GetMapping("/menu")
+       @GetMapping("/menu")
     public String showMenu(Model model) {
         // DELEGAR: El Service se encarga de findAll()
         return "menu";
     }
 
     @GetMapping("/list-notes")
-    public String showAllNotes(Model model) {
-        // DELEGAR: El Service se encarga de findAll()
-        List<Note> notes = noteService.findAll();
-        notes.sort(Comparator.comparingInt(n -> n.getDate().getDayOfYear())); // ordena por dia por no refacorizar a LocalDateTime que seria más preciso
+    public String showAllNotes(@RequestParam(required = false) String keyword, Model model) {
+        List<Note> notes = noteService.findByKeyword(keyword);
+        notes.sort(Comparator.comparingInt(n -> n.getDate().getDayOfYear())); // orden por fecha
         model.addAttribute("notes", notes);
+        model.addAttribute("keyword", keyword);
         return "list_notes";
     }
+
 
     @GetMapping("/new-note")
     public String showNewNoteForm(Model model) {
@@ -60,7 +56,7 @@ public class PageController {
         }
         // DELEGAR: El Service se encarga de save()
         noteService.save(note);
-        return "redirect:/list_notes";
+        return "redirect:/list-notes";
     }
 
     @GetMapping("/edit-note/{id}")
@@ -77,9 +73,6 @@ public class PageController {
             model.addAttribute("note", note);
             return "edit_note";
         }
-
-        // DELEGAR: El Service se encarga de la lógica de actualización y de la
-        // simulación de conflicto
         noteService.update(id, note);
 
         return "redirect:/list-notes";
@@ -89,4 +82,20 @@ public class PageController {
         throw new RuntimeException("Error 500 de prueba forzado desde la vista.");
 
     }
+
+    @GetMapping("/delete-note/{id}")
+    public String showDeleteNoteForm(@PathVariable Long id, Model model) {
+        Note note = noteService.findById(id);
+        model.addAttribute("note", note);
+        return "delete_note";
+    }
+
+    @DeleteMapping("/delete-note/{id}")
+    public String deleteNoteMvc(@PathVariable Long id) {
+        noteService.deleteById(id);
+        return "redirect:/list-notes";
+    }
+
+
+
 }

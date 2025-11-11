@@ -6,6 +6,10 @@
 </head>
 <body>
     <h1>Lista de Notas</h1>
+    <form th:action="@{/list-notes}" method="get">
+        <input type="text" name="keyword" th:value="${keyword}" placeholder="Buscar por título"/>
+        <button type="submit">Filtrar</button>
+    </form>
     <table border="1">
         <thead>
             <tr>
@@ -27,7 +31,7 @@
                 <td th:text="${note.date}"></td>
                 <td th:text="${note.getUpdatedAt()}"></td>
                 <td ><button th:onclick="|window.location.href='/edit-note/${note.id}'|">Editar</button></td>
-                <td ><button>Borrar</button></td>
+                <td ><button th:onclick="|window.location.href='/delete-note/${note.id}'|">Borrar</button></td>
             </tr>
         </tbody>
     </table>

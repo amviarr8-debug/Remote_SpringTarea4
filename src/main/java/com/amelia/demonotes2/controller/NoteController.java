@@ -32,10 +32,10 @@ import jakarta.validation.Valid;
         // siendo esta una interfaz, puede asumir la implementación que hayamos
         // configurado
         @GetMapping
-        public List<Note> getAllNotes() {
-            // DELEGAR: El Service se encarga de findall
-            return noteService.findAll();
+        public List<Note> getAllNotes(@RequestParam(required = false) String keyword) {
+            return noteService.findByKeyword(keyword);
         }
+
 
         @PostMapping
         public Note createNote(@RequestBody Note note) {

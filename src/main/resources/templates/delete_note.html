@@ -3,35 +3,21 @@
 <head>
     <title>Borrar Nota</title>
     <meta charset="UTF-8">
-    <script>
-        function deleteNote() {
-            const noteId = document.getElementById("noteId").value;
-            if (!noteId) {
-                alert("Por favor, introduce un ID válido.");
-                return;
-            }
-
-            fetch('/api/notes/' + noteId, {
-                method: 'DELETE'
-            }).then(response => {
-                if (response.ok) {
-                    alert("Nota borrada exitosamente");
-                } else {
-                    alert("Error al borrar la nota. Asegúrate de que el ID es correcto.");
-                }
-            });
-        }
-    </script>
 </head>
 <body>
-    <h1>Borrar Nota</h1>
-    
-    <form onsubmit="event.preventDefault(); deleteNote();">
-        <label for="noteId">ID de la Nota a Borrar:</label>
-        <input type="number" id="noteId" name="noteId" required><br><br>
-        <button type="submit">Borrar Nota</button>
-    </form>
-    
-    <p><a th:href="@{/menu}">Volver al menú</a></p>
+<h1>Borrar Nota</h1>
+
+<form th:action="@{/delete-note/{id}(id=${note.id})}" th:object="${note}" method="post">
+
+    <input type="hidden" name="_method" value="delete"/>
+
+    <p>¿Seguro que quieres borrar la nota con ID: <span th:text="${note.id}"></span>?</p>
+    <p>Título: <span th:text="${note.title}"></span></p>
+    <p>Contenido: <span th:text="${note.content}"></span></p>
+
+    <button type="submit">Borrar Nota</button>
+</form>
+
+<p><a th:href="@{/list-notes}">Volver a la lista</a></p>
 </body>
 </html>

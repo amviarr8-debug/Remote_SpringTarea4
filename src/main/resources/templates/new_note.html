@@ -10,9 +10,11 @@
     <form action="#" th:action="@{/new-note}" th:object="${note}" method="post">
         <label for="title">Título:</label>
         <input type="text" id="title" name="title" th:field="*{title}"/><br><br>
+        <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}" style="color: red;">[Error de Título]</span><br>
 
         <label for="content">Contenido:</label>
         <textarea id="content" name="content" th:field="*{content}"></textarea><br><br>
+        <span th:if="${#fields.hasErrors('content')}" th:errors="*{content}" style="color: red;">[Error de Título]</span><br>
 
         <button type="submit">Guardar Nota</button>
     </form>

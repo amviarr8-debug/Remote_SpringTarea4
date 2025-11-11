@@ -14,9 +14,6 @@ import java.util.List;
 public class NoteService {
     private final NoteRepository noteRepository;
 
-    // Aquí se inyecta el $NoteRepository$ y se implementa la lógica actual que está
-    // en tus $Controllers$.
-    // Inyección por constructor (preferida sobre @Autowired en campo)
     @Autowired
     public NoteService(NoteRepository noteRepository) {
         this.noteRepository = noteRepository;
@@ -25,6 +22,12 @@ public class NoteService {
     // @Override
     public List<Note> findAll() {
         return noteRepository.findAll();
+    }
+    public List<Note> findByKeyword(String keyword) {
+        if (keyword == null || keyword.isEmpty()) {
+            return findAll(); // Sin filtro
+        }
+        return noteRepository.findByTitleContainingIgnoreCase(keyword);
     }
 
     // @Override
@@ -41,7 +44,6 @@ public class NoteService {
     // @Override
     public void deleteById(Long id) {
         if (!noteRepository.existsById(id)) {
-            // Lógica de validación de existencia antes de borrar (opcional, pero útil)
             throw new NoteNotFoundException(id);
         }
         noteRepository.deleteById(id);
@@ -49,21 +51,16 @@ public class NoteService {
 
     // @Override
     public Note update(Long id, Note noteDetails) {
-        // 1. Reutiliza la gestión del 404
+
         Note existingNote = findById(id); // Usa findById() para rehusar la lógica de excepción
 
-        // 2. ** Lógica de Simulación de Conflicto ** (Movida del Controller)
-        /*if ("CONFLICTO".equalsIgnoreCase(noteDetails.getContent())) {
-            throw new ConcurrencyConflictException("Nota ID " + id);
-        }*/
-        // ** Fin de la Simulación **
-
-        // 3. Aplica las actualizaciones
         existingNote.setTitle(noteDetails.getTitle());
         existingNote.setContent(noteDetails.getContent());
+        existingNote.setDate(existingNote.getDate());
 
-        // 4. Guarda y devuelve
+
         return noteRepository.save(existingNote);
     }
+
 
 }

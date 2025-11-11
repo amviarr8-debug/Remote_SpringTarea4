@@ -8,6 +8,7 @@
 <h1>EDITA NOTAS</h1>
 <form action="#" th:action="@{/edit-note/{id}(id=${note.id})}" th:object="${note}" method="post">
     <input type="hidden" name="_method" value="put"/>
+    <input type="hidden" th:field="*{id}"/> <!-- incluimos el ID oculto para mantener consistencia del objeto -->
     <label for="title">Título:</label>
     <input type="text" id="title" name="title" th:field="*{title}"/><br><br>
     <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}" style="color: red;">[Error de Título]</span><br>
