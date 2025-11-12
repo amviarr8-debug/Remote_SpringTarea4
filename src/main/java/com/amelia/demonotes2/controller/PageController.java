@@ -110,6 +110,7 @@ public class PageController {
     @GetMapping("/list-category")
     public String showAllCategory(Model model) {
         List<Category> categorias = categoriaRepository.findAll();
+        model.addAttribute("categorias", categorias); // para poderlo usar en la vista
         return "list_category";
     }
 
