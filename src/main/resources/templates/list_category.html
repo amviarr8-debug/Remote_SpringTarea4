@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Lista de Notas</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+<h1>Lista de Notas</h1>
+<form th:action="@{/list-category}" method="get">
+    <input type="text" name="keyword" th:value="${keyword}" placeholder="Buscar por categoria"/>
+    <button type="submit">Filtrar</button>
+</form><br><br>
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="category : ${category}">
+
+        <td th:text="${category.id}"></td>
+        <td th:text="${category.nombre}"></td> <!--añadimos el campo de categoria-->
+        <td ><button th:onclick="|window.location.href='/edit-note/${note.id}'|">Editar</button></td>
+        <td ><button th:onclick="|window.location.href='/delete-note/${note.id}'|">Borrar</button></td>
+    </tr>
+    </tbody>
+</table>
+<p th:text="'Total de categorias: ' + ${#lists.size(category)}"></p>
+<p><a th:href="@{/menu}">Volver al menú</a></p>
+</body>
+</html>

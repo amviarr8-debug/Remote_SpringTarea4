@@ -17,6 +17,18 @@
     <textarea id="content" name="content" th:field="*{content}"></textarea><br><br>
     <span th:if="${#fields.hasErrors('content')}" th:errors="*{content}" style="color: red;">[Error de Título]</span><br>
 
+    <label for="categoria">Categoría:</label>
+    <select id="categoria" th:field="*{category}">
+        <option value="">-- Selecciona una Categoría --</option>
+        <option th:each="cat : ${categorias}"
+                th:value="${cat.id}"
+                th:text="${cat.nombre}">
+            Categoría de Ejemplo
+        </option>
+    </select>
+    <br><br>
+
+
     <button type="submit">Guardar Nota</button>
 </form>
 <p><a th:href="@{/menu}">Volver al menú</a></p>

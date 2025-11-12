@@ -9,11 +9,12 @@
     <form th:action="@{/list-notes}" method="get">
         <input type="text" name="keyword" th:value="${keyword}" placeholder="Buscar por título"/>
         <button type="submit">Filtrar</button>
-    </form>
+    </form><br><br>
     <table border="1">
         <thead>
             <tr>
                 <th>ID</th>
+                <th>Categoría</th>
                 <th>Título</th>
                 <th>Contenido</th>
                 <th>Fecha</th>
@@ -25,7 +26,9 @@
         </thead>
         <tbody>
             <tr th:each="note : ${notes}">
+
                 <td th:text="${note.id}"></td>
+                <td th:text="${note.category?.nombre} ?: 'Sin Categoría'" style="font-style: italic; color: #555;"></td> <!--añadimos el campo de categoria-->
                 <td th:text="${note.title}"></td>
                 <td th:text="${note.content}"></td>
                 <td th:text="${note.date}"></td>

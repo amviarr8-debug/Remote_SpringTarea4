@@ -3,6 +3,8 @@ package com.amelia.demonotes2.controller;
 import java.util.Comparator;
 import java.util.List;
 
+import com.amelia.demonotes2.model.Category;
+import com.amelia.demonotes2.repository.CategoriaRepositorio;
 import com.amelia.demonotes2.service.NoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,7 +26,11 @@ public class PageController {
     @Autowired
     private NoteService noteService;
 
-       @GetMapping("/menu")
+    @Autowired
+    private CategoriaRepositorio categoriaRepository;
+
+
+    @GetMapping("/menu")
     public String showMenu(Model model) {
 
         return "menu";
@@ -45,6 +51,9 @@ public class PageController {
         // DELEGAR: El Service se encarga de crear un nuevo objeto Note
         Note note = new Note();
         model.addAttribute("note", note);
+        // === NUEVO: Pasamos la lista de categorías a la vista ===
+        model.addAttribute("categorias", categoriaRepository.findAll());
+
         return "new_note";
     }
 
@@ -64,6 +73,9 @@ public class PageController {
         // DELEGAR: El Service se encarga de findById (y del 404)
         Note note = noteService.findById(id);
         model.addAttribute("note", note);
+        // === NUEVO: Pasamos la lista de categorías a la vista ===
+        model.addAttribute("categorias", categoriaRepository.findAll());
+
         return "edit_note";
     }
 
@@ -95,7 +107,11 @@ public class PageController {
         noteService.deleteById(id);
         return "redirect:/list-notes";
     }
-
+    @GetMapping("/list-category")
+    public String showAllCategory(Model model) {
+        List<Category> categorias = categoriaRepository.findAll();
+        return "list_category";
+    }
 
 
 }

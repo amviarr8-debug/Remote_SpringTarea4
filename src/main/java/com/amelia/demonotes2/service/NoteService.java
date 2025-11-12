@@ -57,6 +57,7 @@ public class NoteService {
         existingNote.setTitle(noteDetails.getTitle());
         existingNote.setContent(noteDetails.getContent());
         existingNote.setDate(existingNote.getDate());
+        existingNote.setCategory(noteDetails.getCategory());
 
 
         return noteRepository.save(existingNote);

@@ -2,6 +2,8 @@ package com.amelia.demonotes2.model;
 
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -14,6 +16,7 @@ public class Note {
     private Long id;
     @NotBlank(message = "El título no puede estar vacío")
     @Size(min = 3, max = 50)
+    @Column(unique = true)
     private String title;
     @NotBlank(message = "El contenido no puede estar vacío")
     @Size(min = 10, max = 500)
@@ -22,6 +25,17 @@ public class Note {
     private LocalDate createdAt;
     private LocalDate updatedAt;
 
+    @ManyToOne(fetch = FetchType.EAGER) // que las cargue cuando sea necesario
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+
+    public Category getCategory() {
+        return category;
+    }
+    public void setCategory(Category category) {
+        this.category = category;
+    }
     @PrePersist
     public void prePersist() {
         this.createdAt = LocalDate.now(); // se asigna automáticamente a la fecha actual.
